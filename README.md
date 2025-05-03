@@ -10,7 +10,7 @@ Dans ce scénario, l’adversaire est représenté par un programme malveillant 
 Pour rappel, ce scénario repose sur une isolation du système de fichiers mise en œuvre à l’aide des éléments suivants :
 
 - Un système de fichiers de base Ubuntu
-- Une isolation via les namespaces utilisateur, mount, PID et, éventuellement, réseau
+- Une isolation via les namespaces utilisateur, mount, PID
 - L’utilisation de pivot_root pour changer la racine du système de fichiers
 - Une comparaison avec l’approche chroot
 - Le UID mapping (mappage des identifiants utilisateurs)
