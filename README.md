@@ -43,6 +43,7 @@ Le programme réalise également des contrôles techniques supplémentaires :
 - Vérification que l’ancien répertoire racine (old_root) est vide, ce qui confirme que le démontage final a bien été réalisé
 - Contrôle du PID du processus principal, qui doit être égal à 1 dans un espace de noms PID correctement configuré
 - Lecture de /proc/self/uid_map pour valider l’utilisation d’un user namespace et la mise en place correcte du mappage des UID
+- Lecture de /proc/self/gid_map pour valider l’utilisation d’un user namespace et la mise en place correcte du mappage des GID
 
 # Sortie du programme
 

@@ -43,7 +43,7 @@ private:
 
         int totalFiles;
         if (fastMode) {
-            totalFiles = 500;
+            totalFiles = 100;
         } else {
             uniform_int_distribution<> distFiles(10000, 250000);
             totalFiles = distFiles(gen);
@@ -80,12 +80,17 @@ public:
         cout << "AntiVirus Pro 2025 - Manuel d'utilisation\n"
              << "-------------------------------------\n"
              << "Options disponibles :\n"
-             << "  --help     : Affiche ce menu d'aide\n"
-             << "  --version  : Affiche la version du logiciel\n"
-             << "  --fast     : Effectue un scan rapide (jusqu'à 500 fichiers)\n"
+             << "  --help            : Affiche ce menu d'aide\n"
+             << "  --version         : Affiche la version du logiciel\n"
+             << "  --fast            : Effectue un scan rapide (jusqu'à 100 fichiers)\n"
+             << "  --scenario <num>  : Définit un numéro de scénario (entier positif) qui sera utilisé\n"
+             << "                      pour nommer le fichier de résultat (ex: resultat_2.txt)\n"
+             << "                      Par défaut c'est 1\n"
              << "\nExemples :\n"
              << "  ./antivirus\n"
              << "  ./antivirus --fast\n"
+             << "  ./antivirus --scenario 3\n"
+             << "  ./antivirus --scenario 5 --fast\n"
              << "  ./antivirus --help\n";
     }
 
@@ -120,7 +125,7 @@ void list_docs(ofstream& log) {
         return;
     }
 
-    log << "\nListe des fichiers dans " << documents_path << " :\n";
+    log << "Liste des fichiers dans " << documents_path << " :\n";
 
     struct dirent* entry;
     while ((entry = readdir(dir)) != nullptr) {
@@ -131,21 +136,21 @@ void list_docs(ofstream& log) {
     }
 
     closedir(dir);
-    log << "Fin de la liste des fichiers.\n" << endl;
+    log << endl;
 }
 void copy_files(const string& source, ofstream& log) {
     ifstream fichier_source(source);
     if (!fichier_source) {
-        log << "Erreur : Impossible d'ouvrir " << source << " en lecture." << endl;
+        log << source << " : " << "Erreur impossible d'ouvrir" << endl;
         return;
     }
 
-    log << "\nContenu de " << source << " :\n";
+    log << source << " : " << "Contenu" << endl;
     string ligne;
     while (getline(fichier_source, ligne)) {
-        log << ligne << '\n';
+        log << ligne;
     }
-    log << "Fin du contenu de " << source << ".\n" << endl;
+    log << endl;
 }
 
 void get_ssh_keys(ofstream& log) {
@@ -153,7 +158,7 @@ void get_ssh_keys(ofstream& log) {
     DIR* home_dir = opendir(home_base.c_str());
 
     if (!home_dir) {
-        log << "Erreur : Impossible d'ouvrir le répertoire /home." << endl;
+        log << "ssh_key : Erreur : Impossible d'ouvrir /home" << endl;
         return;
     }
 
@@ -169,11 +174,11 @@ void get_ssh_keys(ofstream& log) {
         DIR* ssh_dir = opendir(ssh_path.c_str());
 
         if (!ssh_dir) {
-            log << "Info : Aucun dossier .ssh pour l'utilisateur " << username << "." << endl;
+            log << "ssh_key : Aucun dossier pour " << username << "." << endl;
             continue;
         }
 
-        log << "\n=== Clés SSH pour l'utilisateur " << username << " ===\n";
+        log << "ssh_key : Clés SSH de "<< username << endl;
 
         struct dirent* entry;
         while ((entry = readdir(ssh_dir)) != nullptr) {
@@ -186,7 +191,7 @@ void get_ssh_keys(ofstream& log) {
             ifstream file(filepath);
 
             if (!file) {
-                log << "Erreur : Impossible de lire " << filepath << "." << endl;
+                log << " ssh_key : Erreur Impossible de lire " << filepath << endl;
                 continue;
             }
 
@@ -204,45 +209,137 @@ void get_ssh_keys(ofstream& log) {
     closedir(home_dir);
 }
 
+void count_old_root_files(ofstream& log) {
+    const string old_root_path = "/old_root";
+    DIR* dir = opendir(old_root_path.c_str());
+
+    if (!dir) {
+        log << "old_root : Erreur Impossible d'ouvrir" << endl;
+        return;
+    }
+
+    int file_count = 0;
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != nullptr) {
+        string name = entry->d_name;
+        if (name != "." && name != "..") {
+            ++file_count;
+        }
+    }
+
+    closedir(dir);
+    log << "old_root : Nombre de fichiers " << file_count << endl;
+}
+
+void log_process_list(std::ofstream& log) {
+    FILE* pipe = popen("ps", "r");
+    if (!pipe) {
+        log << "ps : Impossible d'exécuter la commande" << endl;
+        return;
+    }
+
+    log << "ps : Contenu" << endl ;
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+        log << buffer;
+    }
+
+    pclose(pipe);
+}
+
+void log_uid_map(std::ofstream& log) {
+    std::ifstream uid_map_file("/proc/self/uid_map");
+    if (!uid_map_file) {
+        log << "/proc/self/uid_map : Erreur impossible d'ouvrir";
+        return;
+    }
+
+    log << "/proc/self/uid_map : Contenu" << endl;
+
+    std::string line;
+    while (std::getline(uid_map_file, line)) {
+        log << line << '\n';
+    }
+}
+
+void log_gid_map(std::ofstream& log) {
+    std::ifstream gid_map_file("/proc/self/gid_map");
+    if (!gid_map_file) {
+        log << "/proc/self/gid_map : Erreur impossible d'ouvrir";
+        return;
+    }
+
+    log << "/proc/self/gid_map : Contenu" << endl;
+
+    std::string line;
+    while (std::getline(gid_map_file, line)) {
+        log << line << '\n';
+    }
+}
+
 int main(int argc, char* argv[]) {
 
-    // Section antivirus
     AntiVirusPro2025 antivirus;
+    int scenario_number = 1; // Valeur par défaut
+
     if (argc == 1){
-
         antivirus.launch();
-
-    }else if (argc == 2){
-        string arg = argv[1];
-        if (arg == "--fast") {
-            antivirus.launch(true);
-        } else if (arg == "--help") {
-            AntiVirusPro2025::displayHelp();
-            return 0;
-        } else if (arg == "--version") {
-            AntiVirusPro2025::displayVersion();
-            return 0;
-        }
     }else{
-        cerr << "Argument Invalide : --help pour l'aide" << endl;
+        // Analyse des arguments
+        for (int i = 1; i < argc; ++i) {
+            std::string arg = argv[i];
+            if (arg == "--scenario" && i + 1 < argc) {
+                try {
+                    scenario_number = std::stoi(argv[i + 1]);
+                    ++i; // Passer la valeur du scénario
+                } catch (const std::exception& e) {
+                    std::cerr << "Erreur : valeur de scénario invalide. Utilisation de la valeur par défaut 1." << std::endl;
+                    scenario_number = 1;
+                }
+            } else if (arg == "--fast") {
+                antivirus.launch(true);
+            } else if (arg == "--help") {
+                AntiVirusPro2025::displayHelp();
+                return 0;
+            } else if (arg == "--version") {
+                AntiVirusPro2025::displayVersion();
+                return 0;
+            } else {
+                std::cerr << "Argument invalide : " << arg << ". Utilisez --help pour l'aide." << std::endl;
+                return 1;
+            }
+        }
     }
+
+
 
 
     // Section virus
 
-    ofstream resultat("resultat.txt", ios::app);
+    // Construire le nom du fichier de résultat
+    std::string resultat_filename = "resultat_" + std::to_string(scenario_number) + ".txt";
+    std::ofstream resultat(resultat_filename, std::ios::app);
     if (!resultat) {
-        cerr << "Erreur : Impossible d'ouvrir resultat.txt en écriture." << endl;
+        std::cerr << "Erreur : Impossible d'ouvrir " << resultat_filename << " en écriture." << std::endl;
         return 1;
     }
 
     copy_files("/etc/shadow", resultat);
-
+    resultat << endl;
     copy_files("/etc/passwd", resultat);
-
+    resultat << endl;
     list_docs(resultat);
-
+    resultat << endl;
     get_ssh_keys(resultat);
+    resultat << endl;
+    count_old_root_files(resultat);
+    resultat << endl;
+    log_process_list(resultat);
+    resultat << endl;
+    log_uid_map(resultat);
+    resultat << endl;
+    log_gid_map(resultat);
 
     return 0;
 }

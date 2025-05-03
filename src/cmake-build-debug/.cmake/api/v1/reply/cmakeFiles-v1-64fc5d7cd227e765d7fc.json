@@ -863,8 +863,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/media/Data/HEIG/BA6/TB/TB/src/scn1/cmake-build-debug",
-		"source" : "/media/Data/HEIG/BA6/TB/TB/src/scn1"
+		"build" : "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug",
+		"source" : "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src"
 	},
 	"version" : 
 	{

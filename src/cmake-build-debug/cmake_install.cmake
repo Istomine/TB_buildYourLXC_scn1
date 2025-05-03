@@ -1,4 +1,4 @@
-# Install script for directory: /media/Data/HEIG/BA6/TB/TB/src/scn1
+# Install script for directory: /media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,7 +45,7 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/media/Data/HEIG/BA6/TB/TB/src/scn1/cmake-build-debug/install_local_manifest.txt"
+  file(WRITE "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()
 if(CMAKE_INSTALL_COMPONENT)
@@ -61,6 +61,6 @@ else()
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/media/Data/HEIG/BA6/TB/TB/src/scn1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

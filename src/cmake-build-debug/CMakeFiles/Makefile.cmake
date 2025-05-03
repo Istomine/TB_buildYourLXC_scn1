@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/media/Data/HEIG/BA6/TB/TB/src/scn1/CMakeLists.txt"
+  "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/CMakeLists.txt"
   "CMakeFiles/4.0.0/CMakeCCompiler.cmake"
   "CMakeFiles/4.0.0/CMakeCXXCompiler.cmake"
   "CMakeFiles/4.0.0/CMakeSystem.cmake"

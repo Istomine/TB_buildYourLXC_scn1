@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/media/Data/HEIG/BA6/TB/TB/src/scn1/cmake-build-debug"
+			"value" : "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -555,7 +555,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/media/Data/HEIG/BA6/TB/TB/src/scn1/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -615,7 +615,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/media/Data/HEIG/BA6/TB/TB/src/scn1"
+			"value" : "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1175,7 +1175,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/media/Data/HEIG/BA6/TB/TB/src/scn1/cmake-build-debug"
+			"value" : "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug"
 		},
 		{
 			"name" : "scn1_IS_TOP_LEVEL",
@@ -1199,7 +1199,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/media/Data/HEIG/BA6/TB/TB/src/scn1"
+			"value" : "/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src"
 		}
 	],
 	"kind" : "cache",
