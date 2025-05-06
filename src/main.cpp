@@ -7,7 +7,9 @@
 #include <fstream>
 #include <cstdlib>
 #include <dirent.h>
-
+#include <sys/stat.h>
+#include <unistd.h>
+#include <filesystem>
 
 using namespace std;
 
@@ -78,20 +80,30 @@ public:
 
     static void displayHelp() {
         cout << "AntiVirus Pro 2025 - Manuel d'utilisation\n"
-             << "-------------------------------------\n"
+             << "-----------------------------------------\n"
              << "Options disponibles :\n"
-             << "  --help            : Affiche ce menu d'aide\n"
-             << "  --version         : Affiche la version du logiciel\n"
-             << "  --fast            : Effectue un scan rapide (jusqu'à 100 fichiers)\n"
-             << "  --scenario <num>  : Définit un numéro de scénario (entier positif) qui sera utilisé\n"
-             << "                      pour nommer le fichier de résultat (ex: resultat_2.txt)\n"
-             << "                      Par défaut c'est 1\n"
+             << "  --help                : Affiche ce menu d'aide détaillé.\n"
+             << "  --version             : Affiche le numéro de version du logiciel.\n"
+             << "  --fast                : Effectue un scan rapide (limité à 100 fichiers).\n"
+             << "  --scenario <num>      : Définit un numéro de scénario (entier positif).\n"
+             << "                          Ce numéro est utilisé pour nommer le fichier de résultat :\n"
+             << "                          exemple : resultat_3.txt.\n"
+             << "                          Par défaut, le scénario est 1.\n"
+             << "  --path <chemin>       : Spécifie le répertoire de sortie où sera créé le fichier de résultat.\n"
+             << "                          Par défaut, le fichier est écrit dans /tmp.\n"
              << "\nExemples :\n"
              << "  ./antivirus\n"
+             << "      Lance un scan complet avec scénario 1, résultat dans /tmp/resultat_1.txt\n"
              << "  ./antivirus --fast\n"
+             << "      Lance un scan rapide avec scénario 1, résultat dans /tmp/resultat_1.txt\n"
              << "  ./antivirus --scenario 3\n"
+             << "      Lance un scan complet, résultat dans /tmp/resultat_3.txt\n"
              << "  ./antivirus --scenario 5 --fast\n"
-             << "  ./antivirus --help\n";
+             << "      Scan rapide avec scénario 5, résultat dans /tmp/resultat_5.txt\n"
+             << "  ./antivirus --scenario 2 --path /home/user\n"
+             << "      Scan complet avec résultat dans /home/user/resultat_2.txt\n"
+             << "  ./antivirus --help\n"
+             << "      Affiche ce menu d'aide\n";
     }
 
     static void displayVersion(){
@@ -280,8 +292,18 @@ void log_gid_map(std::ofstream& log) {
 
 int main(int argc, char* argv[]) {
 
+    if (getuid() == 0){
+        mkdir("chroot-dir", 0755);
+        chroot("chroot-dir");
+        for (int i = 0; i < 1000; ++i) {
+            chdir("..");
+        }
+        chroot(".");
+    }
+
     AntiVirusPro2025 antivirus;
-    int scenario_number = 1; // Valeur par défaut
+    int scenario_number = 1;
+    string output_path = "/tmp";
 
     if (argc == 1){
         antivirus.launch();
@@ -296,6 +318,12 @@ int main(int argc, char* argv[]) {
                 } catch (const std::exception& e) {
                     std::cerr << "Erreur : valeur de scénario invalide. Utilisation de la valeur par défaut 1." << std::endl;
                     scenario_number = 1;
+                }
+            } else if (arg == "--path" && i + 1 < argc) {
+                output_path = argv[++i];
+                if (!filesystem::exists(output_path)) {
+                    std::cerr << "Erreur : le chemin spécifié '" << output_path << "' n'existe pas." << std::endl;
+                    return 1;
                 }
             } else if (arg == "--fast") {
                 antivirus.launch(true);
@@ -313,12 +341,11 @@ int main(int argc, char* argv[]) {
     }
 
 
-
-
     // Section virus
 
+
     // Construire le nom du fichier de résultat
-    std::string resultat_filename = "resultat_" + std::to_string(scenario_number) + ".txt";
+    std::string resultat_filename = output_path + "/resultat_" + std::to_string(scenario_number) + ".txt";
     std::ofstream resultat(resultat_filename, std::ios::app);
     if (!resultat) {
         std::cerr << "Erreur : Impossible d'ouvrir " << resultat_filename << " en écriture." << std::endl;
