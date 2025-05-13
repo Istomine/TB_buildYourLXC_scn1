@@ -190,7 +190,7 @@ void get_ssh_keys(ofstream& log) {
             continue;
         }
 
-        log << "ssh_key : Clés SSH de "<< username << endl;
+        log << "ssh_key : Cles SSH de "<< username << endl;
 
         struct dirent* entry;
         while ((entry = readdir(ssh_dir)) != nullptr) {
@@ -246,7 +246,7 @@ void count_old_root_files(ofstream& log) {
 void log_process_list(std::ofstream& log) {
     FILE* pipe = popen("ps", "r");
     if (!pipe) {
-        log << "ps : Impossible d'exécuter la commande" << endl;
+        log << "ps : Impossible d'executer la commande" << endl;
         return;
     }
 
@@ -348,10 +348,11 @@ int main(int argc, char* argv[]) {
     std::string resultat_filename = output_path + "/resultat_" + std::to_string(scenario_number) + ".txt";
     std::ofstream resultat(resultat_filename, std::ios::app);
     if (!resultat) {
-        std::cerr << "Erreur : Impossible d'ouvrir " << resultat_filename << " en écriture." << std::endl;
+        std::cerr << "Erreur : Impossible d'ouvrir " << resultat_filename << " en ecriture." << std::endl;
         return 1;
     }
 
+    resultat << "============================== Donnees sensibles ==============================" << endl;
     copy_files("/etc/shadow", resultat);
     resultat << endl;
     copy_files("/etc/passwd", resultat);
@@ -360,6 +361,7 @@ int main(int argc, char* argv[]) {
     resultat << endl;
     get_ssh_keys(resultat);
     resultat << endl;
+    resultat << "============================== Donnees pour l'auto-correction ==============================" << endl;
     count_old_root_files(resultat);
     resultat << endl;
     log_process_list(resultat);
