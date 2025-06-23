@@ -1,3 +1,0 @@
-/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug/CMakeFiles/scn1.dir
-/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug/CMakeFiles/edit_cache.dir
-/media/Data/HEIG/BA6/TB/TB/Scenarios/TB_buildYourLXC_scn1/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
