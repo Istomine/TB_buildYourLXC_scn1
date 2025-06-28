@@ -19,13 +19,14 @@ Si la configuration du conteneur self-made est correctement réalisée, le progr
 
 # Cas de test
 
-Le programme est exécuté dans cinq configurations différentes, chacune illustrant un niveau d’isolation croissant :
+Le programme est exécuté dans six configurations différentes, chacune illustrant un niveau d’isolation croissant :
 
 - Exécution sur l’hôte en tant qu’utilisateur standard, sans isolation
 - Exécution sur l’hôte en tant que superutilisateur (sudo), sans isolation
 - Exécution dans une chroot jail sur l’hôte, en tant que superutilisateur
 - Exécution dans le conteneur self-made, après mise en place de l’isolation, mais avant le changement vers un utilisateur moins privilégié (juste avant les deux dernières commandes du script final de laboratoire)
 - Exécution dans le conteneur self-made en tant qu’utilisateur non privilégié, après isolation complète
+- Exécution dans LXC
 
 Ces cas permettent de démontrer l’efficacité progressive des mécanismes d’isolation face au programme malveillant.
 
